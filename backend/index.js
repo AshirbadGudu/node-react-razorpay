@@ -4,8 +4,8 @@ const cors = require("cors"),
   express = require("express"),
   Razorpay = require("razorpay"),
   razorpay = new Razorpay({
-    key_id: "rzp_test_VULKZYu2VDqjkD",
-    key_secret: "zrHvkJf4PdOSe1NiT5aygC0x",
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET,
   });
 
 express()
@@ -13,30 +13,19 @@ express()
   .use(express.urlencoded({ extended: true }))
   .use(express.json())
   .get("/", (req, res) => res.send({ data: "Node Express Razorpay API" }))
-  .post("/razorpay", async (req, res) => {
-    const payment_capture = 1;
-    const amount = 499;
-    const currency = "INR";
-
+  .post("/generate-razorpay-id", async (req, res) => {
+    const { amount } = req.body;
     const options = {
       amount: amount * 100,
-      currency,
-      receipt: `${currency}_${payment_capture}_${Date.now()}`,
-      payment_capture,
+      currency: "INR",
+      receipt: `INR_RECEIPT_${Date.now()}`,
+      payment_capture: 1,
     };
-
     try {
       const response = await razorpay.orders.create(options);
-      console.log(response);
-      res.json({
-        id: response.id,
-        currency: response.currency,
-        amount: response.amount,
-      });
+      res.json(response);
     } catch (error) {
       console.log(error);
     }
   })
-  .listen(port, () =>
-    console.log(`Listening on port http://localhost:${port}`)
-  );
+  .listen(port, () => console.log(`Running at http://localhost:${port}`));
