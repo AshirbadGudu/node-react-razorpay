@@ -16,11 +16,16 @@ function App() {
         "https://checkout.razorpay.com/v1/checkout.js"
       );
       if (!res) return alert("Razorpay Failed to load");
-      const data = await fetch("http://localhost:5337/razorpay", {
-        method: "POST",
-      }).then((response) => response.json());
+      const data = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/generate-razorpay-id`,
+        {
+          headers: { "Content-Type": "application/json" },
+          method: "POST",
+          body: JSON.stringify({ amount: 200 }),
+        }
+      ).then((response) => response.json());
       const options = {
-        key: "rzp_test_VULKZYu2VDqjkD",
+        key: process.env.REACT_APP_RAZORPAY_KEY_ID,
         currency: data.currency,
         amount: data.amount.toString(),
         order_id: data.id,
