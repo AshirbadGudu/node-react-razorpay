@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "react": "17.0.2",
-    "react-native": "0.66.1"
+    "react-native": "0.66.1",
+    "react-native-razorpay": "^2.2.8"
   },
   "devDependencies": {
     "@babel/core": "^7.15.8",
